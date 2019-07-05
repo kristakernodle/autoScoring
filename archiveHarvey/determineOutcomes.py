@@ -20,11 +20,15 @@ if __name__ == "__main__":
 #	pathToMirrors = sys.argv[2]
 	listOfResults = []
 	os.chdir(pathToDirect)
-	print("")
+	
+    print("")
 	print("Scoring...")
-	total = float(len(glob.glob("*.csv")))
-	count = 0.0
-	countOfToolbar = 0
+	
+    total = float(len(glob.glob("*.csv")))
+	
+    count = 0.0
+	
+    countOfToolbar = 0
 	sys.stdout.write("[%s]" % (" " * 40))
 	sys.stdout.flush()
 	sys.stdout.write("\b" * (40+1))

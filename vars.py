@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Variables
+User Defined Variables
 
 Created on Fri Jul  5 12:27:07 2019
 
 @author: Krista Kernodle
 """
 
-## Variables
-# This file is designed to hold all user identified variables necessary for
+## User Defined Variables
+# This file is designed to hold all user defined variables necessary for
 # use with the automated scoring software developed in the Leventhal lab.
 
 
