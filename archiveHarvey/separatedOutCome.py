@@ -1,4 +1,4 @@
-#PLEASE NOTE THAT THIS FILE DOES NOT CHECK FOR THE AVERAGE PELLET LOCATION
+# PLEASE NOTE THAT THIS FILE DOES NOT CHECK FOR THE AVERAGE PELLET LOCATION
 # Some binary checkers need the mirrorX/mirrorY pellet and others need directX/directY
 
 
@@ -8,7 +8,7 @@ from findTriggerFrame import *
 import itertools
 from scipy.signal import find_peaks
 
-def smooth(x,window_len=15,window='hanning'):
+ def smooth(x,window_len=15,window='hanning'):
     if window_len<3:
         return x
 
