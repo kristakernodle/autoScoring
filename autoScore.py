@@ -45,6 +45,7 @@ for directFile in sorted(allFiles_direct):
     # Find mirrorFile that corresponds with this trial
     for mirrorFile in allFiles_mirror:
         if uniqueID in mirrorFile:
+            # break # This is used for debugging
             outcome = scoreFunctions.determineOutcome(directFile,mirrorFile)
             outcome=1
             allScores.append([uniqueID.split('_')[-1],str(outcome)])

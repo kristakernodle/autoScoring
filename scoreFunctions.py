@@ -31,35 +31,35 @@ import auxFunc
 
 ### Define Individual Score Functions
 
-def determine0():
+def determine0(directCSV, mirrorCSV):
     return 0
 
-def determine1():
+def determine1(directCSV, mirrorCSV):
     return 1
 
-def determine2():
+def determine2(directCSV, mirrorCSV):
     return 2
 
-def determine3():
+def determine3(directCSV, mirrorCSV):
     return 3
 
-def determine4():
+def determine4(directCSV, mirrorCSV):
     return 4
 
-def determine5():
+def determine5(directCSV, mirrorCSV):
     return 5
 
 # def determine6(): VIDEOS AND DLC ANALYSIS DO NOT EXIST FOR THIS SCORE
     
-def determine7():
+def determine7(directCSV, mirrorCSV):
     return 7
 
-def determine8():
+def determine8(directCSV, mirrorCSV):
     return 8
 
 # def determine9(): THIS SCORE CANNOT BE FOUND WITH AUTOMATED SCORING
     
-def determine10():
+def determine10(directCSV, mirrorCSV):
     return 9
 
 ### Define function to test all possible individual scores
