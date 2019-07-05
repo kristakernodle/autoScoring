@@ -16,8 +16,8 @@ def determineOutcome(csvFileName, csvMirrorFileName):
 
 if __name__ == "__main__":
 	currentDirectory = os.getcwd()
-	pathToDirect = sys.argv[1]
-	pathToMirrors = sys.argv[2]
+#	pathToDirect = sys.argv[1]
+#	pathToMirrors = sys.argv[2]
 	listOfResults = []
 	os.chdir(pathToDirect)
 	print("")
