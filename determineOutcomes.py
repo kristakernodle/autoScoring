@@ -20,8 +20,8 @@ if __name__ == "__main__":
 	pathToMirrors = sys.argv[2]
 	listOfResults = []
 	os.chdir(pathToDirect)
-	print ""
-	print "Scoring..."
+	print("")
+	print("Scoring...")
 	total = float(len(glob.glob("*.csv")))
 	count = 0.0
 	countOfToolbar = 0
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 	ratname = ''
 	for file in sorted(glob.glob("*.csv")):
 		if (count/total * 40) > countOfToolbar:
-			for i in xrange(int((count/total * 40) - countOfToolbar)):
+			for i in range(int((count/total * 40) - countOfToolbar)):
 				sys.stdout.write("-")
 				sys.stdout.flush()
 			countOfToolbar = int(count/total*40)
@@ -56,16 +56,16 @@ if __name__ == "__main__":
 
 	sys.stdout.write("\n")
 
-	print ""
-	print ""
+	print("")
+	print("")
 	os.chdir(currentDirectory)
 	filename = ratname + "_scores.csv"
 	file = open(filename, 'w')
-	for item in xrange(len(listOfResults)-1):
+	for item in range(len(listOfResults)-1):
 		file.write(listOfResults[item][0]+','+listOfResults[item][1]+'\n')
 	file.write(listOfResults[-1][0]+','+listOfResults[-1][1]+'\n')
 	file.close()
-	print "Wrote data to " + filename
-	print ""
+	print("Wrote data to " + filename)
+	print("")
 
 

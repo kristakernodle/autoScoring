@@ -2,6 +2,12 @@
 
 A command-line program for the Leventhal Lab to quickly score Categories 0, 1, 2, 4, and 7.
 
+# requirements
+This code is writte in python 2.7 and is not presently compatibile with python 3.
+Additional required packages:
+* scipy
+* numpy
+
 ### Usage
 
 Clone the repository, change directories into the folder. Make sure your direct view csv files are in one folder, and your corresponding side view csv files are in another. Then run the following command:

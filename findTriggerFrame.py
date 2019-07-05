@@ -20,17 +20,17 @@ def findTriggerFrame(csvFileName, csvFileNameMirror):
 	xcoords = []
 	xcoords2 = list(range(1290))
 	smoothedMovement = []
-	for i in xrange(0, 1290):
+	for i in range(0, 1290):
 		if digit2pvalue[i] < 0.75:
 			digit2xvalue[i] = 0
 
-	for i in xrange(1, 1280):
+	for i in range(1, 1280):
 		if digit2xvalue[i] != 0:
 
 			if digit2xvalue[i+1] == 0 or digit2xvalue[i+2] == 0 or digit2xvalue[i+3] == 0 or digit2xvalue[i+4] == 0 or digit2xvalue[i+5] == 0 or digit2xvalue[i] > 250: 
 				
 				digit2xvalue[i] = 0
 
-	for i in xrange(1, 1290):
+	for i in range(1, 1290):
 		if digit2xvalue[i] != 0:
 			return i

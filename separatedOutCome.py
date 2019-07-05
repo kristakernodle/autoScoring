@@ -44,12 +44,12 @@ def determine0(csvFileName, csvFileNameMirror):
 	pvaluesPelletMirror = [float(i) for i in pvaluesPelletMirror]
 
 	pelletFrames = []
-	for i in xrange(0, len(pvaluesPellet)):
+	for i in range(0, len(pvaluesPellet)):
 		if pvaluesPellet[i] > 0.95:
 			pelletFrames.append(i)
 
 	pelletFramesMirror = []
-	for i in xrange(0,len(pvaluesPelletMirror)):
+	for i in range(0,len(pvaluesPelletMirror)):
 		if pvaluesPelletMirror[i] > 0.95:
 			pelletFramesMirror.append(i)
 
@@ -177,7 +177,7 @@ def determine7(csvFileName, csvFileNameMirror):
 		postReachLength = len(postReachPelletLocations)
 
 		maxDist = 0
-		for x in xrange(0, postReachLength):
+		for x in range(0, postReachLength):
 				dist = math.sqrt((float(postReachPelletLocations[x][0])-mean_preReachLocation[0])**2+(float(postReachPelletLocations[x][1])-mean_preReachLocation[1])**2)
 				if dist > maxDist:
 					maxDist = dist
@@ -212,7 +212,7 @@ def determine7(csvFileName, csvFileNameMirror):
 
 		postReachLength = len(postReachPelletLocations)
 		maxDistMirror = 0
-		for x in xrange(0, postReachLength):
+		for x in range(0, postReachLength):
 				dist = math.sqrt((float(postReachPelletLocations[x][0])-mean_preReachLocation[0])**2+(float(postReachPelletLocations[x][1])-mean_preReachLocation[1])**2)
 				
 				if dist > maxDistMirror:
@@ -250,7 +250,7 @@ def determine1(csvFileName, csvFileNameMirror):
 	digit2xvalue = [float(i) for i in digit2xvalue]
 	digit2pvalue = [float(i) for i in digit2pvalue]
 
-	for i in xrange(0, 1291):
+	for i in range(0, 1291):
 		if digit2pvalue[i] < 0.95 or digit2xvalue[i] > 250:
 			digit2xvalue[i] = 0
 	#print findTriggerFrame(csvFileName,csvFileNameMirror)
@@ -262,7 +262,7 @@ def determine1(csvFileName, csvFileNameMirror):
 	digit2xvalue = filter(lambda a: a != 0, digit2xvalue)
 
 
-	for i in xrange(len(digit2xvalue)-2, 0, -1):
+	for i in range(len(digit2xvalue)-2, 0, -1):
 		if abs(digit2xvalue[i] - digit2xvalue[i+1]) < 4:
 			digit2xvalue.pop(i+1)
 	
@@ -294,20 +294,20 @@ def determine1(csvFileName, csvFileNameMirror):
 		
 	derivative = np.gradient(digit2xvalue)
 
-	for i in xrange(0, len(derivative)):
+	for i in range(0, len(derivative)):
 		if abs(derivative[i]) > 3:
 			derivative[i] = 0
 		
 	derivative = [float('nan') if x==0 else x for x in derivative]
 	
-	for i in xrange(1, len(derivative)-1):
+	for i in range(1, len(derivative)-1):
 		if np.isnan(derivative[i]):
 			if not np.isnan(derivative[i-1]) and not np.isnan(derivative[i+1]):
 				derivative[i] = 0
 
 	start = 0
 	end = 0
-	for i in xrange(0, len(derivative)-1):
+	for i in range(0, len(derivative)-1):
 		if not np.isnan(derivative[i]):
 			start = i
 			end = i
@@ -381,7 +381,7 @@ def determine2(csvFileName, csvFileNameMirror):
 	digit3pvalue = [float(i) for i in digit3pvalue]
 
 	averageDigitPosition = []
-	for i in xrange(0, len(digit1xvalue)):
+	for i in range(0, len(digit1xvalue)):
 		count = 0.0
 		total = 0.0
 		if digit1pvalue[i] > 0.95:
@@ -404,7 +404,7 @@ def determine2(csvFileName, csvFileNameMirror):
 
 
 	modeCount = 0
-	for i in xrange(0, len(averageDigitPosition)-1):
+	for i in range(0, len(averageDigitPosition)-1):
 		if averageDigitPosition[i] != 0 and averageDigitPosition[i+1] == 0:
 			modeCount += 1
 	
@@ -607,7 +607,7 @@ def determine4(csvFileName, csvFileNameMirror):
 		postReachLength = len(postReachPelletLocations)
 		maxDist = 0
 		maxYDist = 0.0
-		for x in xrange(0, postReachLength):
+		for x in range(0, postReachLength):
 			dist = math.sqrt((float(postReachPelletLocations[x][0])-mean_preReachLocation[0])**2+(float(postReachPelletLocations[x][1])-mean_preReachLocation[1])**2)
 			ydist = abs(float(postReachPelletLocations[x][1])-mean_preReachLocation[1])
 			if dist > maxDist:
@@ -646,7 +646,7 @@ def determine4(csvFileName, csvFileNameMirror):
 
 		count = 0.0		
 
-		for x in xrange(0, postReachLength):
+		for x in range(0, postReachLength):
 			dist = math.sqrt((float(postReachPelletLocations[x][0])-mean_preReachLocation[0])**2+(float(postReachPelletLocations[x][1])-mean_preReachLocation[1])**2)
 			ydist = abs(float(postReachPelletLocations[x][1])-mean_preReachLocation[1])
 
