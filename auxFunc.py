@@ -83,6 +83,10 @@ def directoryContents(directory,allSubDir=True):
     else:
         return file_list, dir_list
             
+def readfile(F):
+    with open(F) as f:
+        return f.read().splitlines()
+
 def writeToCSV(saveFullFilename,itemsList):
     with open(saveFullFilename,'w') as f:
         for item in itemsList:
