@@ -33,7 +33,29 @@ import auxFunc
 ### Define Individual Score Functions
 
 def determine0(directCSV, mirrorCSV):
-    return 0
+    
+    pelletDirect = manipDLCFunc.readDLC(directCSV,'pellet','right')
+    
+    # Test first 100 frames to see if the pellet is present
+    numLowP = 0
+    for frameNum in range(0,99):
+        
+        if pelletDirect.pval[frameNum] >= 0.95:
+            # If the pellet is present, move to the next frame
+            continue
+        
+        elif pelletDirect.pval[frameNum] < 0.95 and numLowP >= 50:
+            # If the pellet is not present and has not been present for at least
+            # half of the frames, return the function as True
+            return True
+        
+        else:
+            # If the pellet is not present, increase numLowP by one to track
+            # how many frames the pellet has not been present for
+            numLowP += 1
+            
+    # If the pellet is present for more than half of the first 100 frames, return False
+    return False
 
 def determine1(directCSV, mirrorCSV):
     return 1
@@ -105,9 +127,10 @@ def determineOutcome(directCSV, mirrorCSV):
 
     if determine7(directCSV,mirrorCSV):
         return 7
-
-#	if determine0(csvFileName, csvMirrorFileName):
-#		return 0
+    if determine0(directCSV, mirrorCSV):
+        return 0
+    
+    return 99
 #	if determine1(csvFileName, csvMirrorFileName):
 #		return 1
 #	if determine2(csvFileName, csvMirrorFileName):
