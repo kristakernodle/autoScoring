@@ -62,8 +62,8 @@ def determine7(directCSV, mirrorCSV):
     # the end of the video AND, if the pellet is present, make sure it is 
     
     # Read in DLC values for the pellet
-    pelletDirect = manipDLCFunc.readDLC(directCSV,'pellet')
-    pelletMirror = manipDLCFunc.readDLC(mirrorCSV,'pellet')
+    pelletDirect = manipDLCFunc.readDLC(directCSV,'pellet','right')
+    pelletMirror = manipDLCFunc.readDLC(mirrorCSV,'pellet','right')
     
     # Test the last 50 frames to see if the pellet is present
     numLowP = 0

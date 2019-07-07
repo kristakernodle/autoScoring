@@ -113,16 +113,16 @@ def withinDistThresh(bodypartList_direct,bodypartList_mirror,distThresh=100,star
     # Check is x,y points are greater than distThresh away from average
     largeDistDir = 0
     largeDistMir = 0
-    for frameNum in range(startFrame,endFrame):
+    for frameNum in range(0,len(xDir)):
         
-        if xDirAvg-distThresh <= xDir <= xDirAvg+distThresh and yDirAvg-distThresh <= yDir <= yDirAvg+distThresh:
+        if xDirAvg-distThresh <= xDir[frameNum] <= xDirAvg+distThresh and yDirAvg-distThresh <= yDir[frameNum] <= yDirAvg+distThresh:
             continue
         elif largeDistDir >= np.ceil(len(xDir)/2):
             return False
         else:
             largeDistDir += 1
             
-        if xMirAvg-distThresh <= xMir <= xMirAvg+distThresh and yMirAvg-distThresh <= yMir <= yMirAvg+distThresh:
+        if xMirAvg-distThresh <= xMir[frameNum] <= xMirAvg+distThresh and yMirAvg-distThresh <= yMir[frameNum] <= yMirAvg+distThresh:
             continue
         elif largeDistMir >=np.ceil(len(xMir)/2):
             return False
