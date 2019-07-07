@@ -65,25 +65,25 @@ def readDLC(f,bodypart):
     
     return pd.read_csv(f,header=2,names=['x','y','pval'],usecols=cols)
 
-def withinDistThresh(directView,mirrorView,distThresh=100):
+def withinDistThresh(directCSV,mirrorCSV,distThresh=100):
 
-    xDirAvg_start = auxFunc.mean(directView.x[0:50])
-    yDirAvg_start = auxFunc.mean(directView.y[0:50])
-    xMirAvg_start = auxFunc.mean(mirrorView.x[0:50])
-    yMirAvg_start = auxFunc.mean(mirrorView.y[0:50])
+    xDirAvg_start = auxFunc.mean(directCSV.x[0:50])
+    yDirAvg_start = auxFunc.mean(directCSV.y[0:50])
+    xMirAvg_start = auxFunc.mean(mirrorCSV.x[0:50])
+    yMirAvg_start = auxFunc.mean(mirrorCSV.y[0:50])
     
     largeDistDir = 0
     largeDistMir = 0
-    for frameNum in range(len(directView)-51,len(directView)-1):
+    for frameNum in range(len(directCSV)-51,len(directCSV)-1):
         
-        if xDirAvg_start-distThresh <= directView.x[frameNum] <= xDirAvg_start+distThresh and yDirAvg_start-distThresh <= directView.y[frameNum] <= yDirAvg_start+distThresh:
+        if xDirAvg_start-distThresh <= directCSV.x[frameNum] <= xDirAvg_start+distThresh and yDirAvg_start-distThresh <= directCSV.y[frameNum] <= yDirAvg_start+distThresh:
             continue
         elif largeDistDir >= 25:
             return False
         else:
             largeDistDir += 1
             
-        if xMirAvg_start-distThresh <= mirrorView.x[frameNum] <= xMirAvg_start+distThresh and yMirAvg_start-distThresh <= mirrorView.y[frameNum] <= yMirAvg_start+distThresh:
+        if xMirAvg_start-distThresh <= mirrorCSV.x[frameNum] <= xMirAvg_start+distThresh and yMirAvg_start-distThresh <= mirrorCSV.y[frameNum] <= yMirAvg_start+distThresh:
             continue
         elif largeDistMir >= 25:
             return False
