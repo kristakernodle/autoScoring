@@ -58,7 +58,13 @@ def determine0(directCSV, mirrorCSV):
     return False
 
 def determine1(directCSV, mirrorCSV):
-    return 1
+    digit2Direct = manipDLCFunc.readDLC(directCSV,'digit2','right')
+    digit2Mirror = manipDLCFunc.readDLC(mirrorCSV,'digit2','right')
+    
+    xDir,yDir,xMir,yMir = manipDLCFunc.sigP(digit2Direct,digit2Mirror,0,len(digit2Direct))
+    
+    # Remove
+    digit2xvalue = filter(lambda a: a != 0, digit2xvalue)
 
 def determine2(directCSV, mirrorCSV):
     return 2

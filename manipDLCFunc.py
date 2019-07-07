@@ -87,9 +87,16 @@ def sigP(bodypartList_direct,bodypartList_mirror,startFrame,endFrame):
         if bodypartList_direct.pval[frameNum] >= 0.95:
             xDir.append(bodypartList_direct.x[frameNum])
             yDir.append(bodypartList_direct.y[frameNum])
+        else:
+            xDir.append(0)
+            yDir.append(0)
         if bodypartList_mirror.pval[frameNum] >= 0.95:
             xMir.append(bodypartList_mirror.x[frameNum])
             yMir.append(bodypartList_mirror.y[frameNum])
+        else:
+            xMir.append(0)
+            yMir.append(0)
+            
     return xDir,yDir,xMir,yMir
 
 def withinDistThresh(distThresh,xDir,yDir,xDirAvg,yDirAvg,xMir,yMir,xMirAvg,yMirAvg):
