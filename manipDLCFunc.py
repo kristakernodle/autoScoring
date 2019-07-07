@@ -16,7 +16,12 @@ import numpy as np
 import pandas as pd
 import auxFunc
 
+### Define Functions
+
 def smooth(x,window_len=15,window='hanning'):
+    # This is Harvey's function and I haven't put time into figuring out what 
+    # it's doing yet
+
     if window_len<3:
         return x
 
@@ -29,7 +34,17 @@ def smooth(x,window_len=15,window='hanning'):
     y=np.convolve(w/w.sum(),s,mode='valid')
     return y
 
-def readDLC(f,bodypart):
+def readDLC(f,bodypart,pawPref):
+    # This function reads in DLC data for a single bodypart
+    
+    # INPUT:
+        # f - The .csv file containing all DLC output data
+        # bodypart - The bodypart (str) that you want to read in
+        # pawPref - The paw preference of the subject (for identifying pawdorsum)
+    
+    # OUTPUT:
+        # DataFrame with column labels: x, y, and pval
+        
     if 'mcp1' in bodypart:
         cols=[1,2,3]
     elif 'mcp2' in bodypart:
@@ -54,38 +69,62 @@ def readDLC(f,bodypart):
         cols=[31,32,33]
     elif 'digit4' in bodypart:
         cols=[34,35,36]
-    elif 'rightpawdorsum' in bodypart:
+    elif pawPref + 'pawdorsum' in bodypart:
         cols=[37,38,39]
     elif 'nose' in bodypart:
         cols=[40,41,42]
     elif 'pellet' in bodypart:
         cols=[43,44,45]
-    elif 'leftpawdorsum' in bodypart:
+    elif 'pawdorsum' in bodypart:
         cols=[46,47,48]
     
     return pd.read_csv(f,header=2,names=['x','y','pval'],usecols=cols)
 
-def withinDistThresh(directCSV,mirrorCSV,distThresh=100):
-
-    xDirAvg_start = auxFunc.mean(directCSV.x[0:50])
-    yDirAvg_start = auxFunc.mean(directCSV.y[0:50])
-    xMirAvg_start = auxFunc.mean(mirrorCSV.x[0:50])
-    yMirAvg_start = auxFunc.mean(mirrorCSV.y[0:50])
+def withinDistThresh(bodypartList_direct,bodypartList_mirror,distThresh=100,startFrame=0,endFrame=50):
+    # This function calculates whether a bodypart remains within a specified
+    # distance threshold for at least half of the provided frames
     
+    # INPUT:
+        # bodypartList_direct - DataFrame from readDLC func (above) for direct view
+        # bodypartList_mirror - DataFrame from readDLC func (above) for mirror view
+        # distThresh - maximum distance from average that is acceptable (default 100px)
+        # startFrame - frame number to start comparison (default is first frame)
+        # endFrame - frame number to end comparison (default is 50th frame)
+    
+    # OUTPUT:
+        # boolean value
+    
+    # Find x and y values in direct view and mirror view that are >= 0.95
+    xDir=yDir=xMir=yMir=[]
+    for frameNum in range(startFrame,endFrame):
+        if bodypartList_direct.pval[frameNum] >= 0.95:
+            xDir.append(bodypartList_direct.x[frameNum])
+            yDir.append(bodypartList_direct.y[frameNum])
+        if bodypartList_mirror.pval[frameNum] >= 0.95:
+            xMir.append(bodypartList_mirror.x[frameNum])
+            yMir.append(bodypartList_mirror.y[frameNum])
+    
+    # Calculate average x and y values for designated frames when pval >= 0.95
+    xDirAvg = auxFunc.mean(xDir)
+    yDirAvg = auxFunc.mean(yDir)
+    xMirAvg = auxFunc.mean(xMir)
+    yMirAvg = auxFunc.mean(yMir)
+    
+    # Check is x,y points are greater than distThresh away from average
     largeDistDir = 0
     largeDistMir = 0
-    for frameNum in range(len(directCSV)-51,len(directCSV)-1):
+    for frameNum in range(startFrame,endFrame):
         
-        if xDirAvg_start-distThresh <= directCSV.x[frameNum] <= xDirAvg_start+distThresh and yDirAvg_start-distThresh <= directCSV.y[frameNum] <= yDirAvg_start+distThresh:
+        if xDirAvg-distThresh <= xDir <= xDirAvg+distThresh and yDirAvg-distThresh <= yDir <= yDirAvg+distThresh:
             continue
-        elif largeDistDir >= 25:
+        elif largeDistDir >= np.ceil(len(xDir)/2):
             return False
         else:
             largeDistDir += 1
             
-        if xMirAvg_start-distThresh <= mirrorCSV.x[frameNum] <= xMirAvg_start+distThresh and yMirAvg_start-distThresh <= mirrorCSV.y[frameNum] <= yMirAvg_start+distThresh:
+        if xMirAvg-distThresh <= xMir <= xMirAvg+distThresh and yMirAvg-distThresh <= yMir <= yMirAvg+distThresh:
             continue
-        elif largeDistMir >= 25:
+        elif largeDistMir >=np.ceil(len(xMir)/2):
             return False
         else:
             largeDistMir += 1
