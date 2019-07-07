@@ -28,6 +28,7 @@ Created on Fri Jul  5 15:40:57 2019
 
 ### Set Up
 import auxFunc
+import manipDLCFunc
 
 ### Define Individual Score Functions
 
@@ -62,15 +63,8 @@ def determine7(directCSV, mirrorCSV):
     # the end of the video AND, if the pellet is present, make sure it is 
     
     # Read in DLC values for the pellet
-    pelletDirect = auxFunc.readDLC(directCSV,'pellet')
-    pelletMirror = auxFunc.readDLC(mirrorCSV,'pellet')
-
-    # Find the average starting location (first 50 frames) of the pellet in 
-    # all views
-    xDirAvg_start = auxFunc.mean(pelletDirect.x[0:50])
-    yDirAvg_start = auxFunc.mean(pelletDirect.y[0:50])
-    xMirAvg_start = auxFunc.mean(pelletMirror.x[0:50])
-    yMirAvg_start = auxFunc.mean(pelletMirror.y[0:50])
+    pelletDirect = manipDLCFunc.readDLC(directCSV,'pellet')
+    pelletMirror = manipDLCFunc.readDLC(mirrorCSV,'pellet')
     
     # Test the last 50 frames to see if the pellet is present
     numLowP = 0
@@ -92,8 +86,7 @@ def determine7(directCSV, mirrorCSV):
     
     # If the pellet is present for more than half of the last 50 frames, test
     # to see how far it is away from the average pellet starting value
-    value = auxFunc.withinDistThresh(50,pelletDirect,pelletMirror,xDirAvg_start,yDirAvg_start,xMirAvg_start,yMirAvg_start)
-    return value
+    return manipDLCFunc.withinDistThresh(pelletDirect,pelletMirror,50)
 
 def determine8(directCSV, mirrorCSV):
     return 8
