@@ -14,8 +14,12 @@ Created on Fri Jul  5 12:50:49 2019
 
 ### Set up
 from pathlib import Path
+import numpy as np
 
 ### Define Functions
+
+def distBtwnPts(x1,y1,x2,y2):
+    return np.sqrt((x1-x2)**2+(y1-y2)**2)
 
 def mean(vector):
     return sum(vector)/len(vector)

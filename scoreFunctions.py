@@ -28,6 +28,7 @@ Created on Fri Jul  5 15:40:57 2019
 
 ### Set Up
 import manipDLCFunc
+import auxFunc
 
 ### Define Individual Score Functions
 
@@ -65,14 +66,22 @@ def determine7(directCSV, mirrorCSV):
     pelletDirect = manipDLCFunc.readDLC(directCSV,'pellet','right')
     pelletMirror = manipDLCFunc.readDLC(mirrorCSV,'pellet','right')
     
+    xDirAvg = auxFunc.mean(pelletDirect.x)
+    yDirAvg = auxFunc.mean(pelletDirect.y)
+    xMirAvg = auxFunc.mean(pelletMirror.x)
+    yMirAvg = auxFunc.mean(pelletMirror.y)
+    
     # Test the last 50 frames to see if the pellet is present
     numLowP = 0
     for frameNum in range(len(pelletDirect)-51,len(pelletDirect)-1):
         
         if pelletDirect.pval[frameNum] >= 0.95:
-            # If the pellet is present, move to the next frame
-            continue
-        
+            # If the pellet is present, test to see if it's within a distance
+            # threshold
+            if manipDLCFunc.withinDistThresh(50,pelletDirect.x[frameNum],pelletDirect.y[frameNum],xDirAvg,yDirAvg,pelletMirror.x[frameNum],pelletMirror.y[frameNum],xMirAvg,yMirAvg):
+                return True
+            else:
+                return False
         elif pelletDirect.pval[frameNum] < 0.95 and numLowP >= 25:
             # If the pellet is not present and has not been present for at least
             # 25 frames, return the function as False
@@ -82,11 +91,6 @@ def determine7(directCSV, mirrorCSV):
             # If the pellet is not present, increase numLowP by one to track
             # how many frames the pellet has not been present for
             numLowP += 1
-    
-    # If the pellet is present for more than half of the last 50 frames, test
-    # to see how far it is away from the average pellet starting value (distance
-    # threshold is set to 50 here)
-    return manipDLCFunc.withinDistThresh(pelletDirect,pelletMirror,50,len(pelletDirect)-51,len(pelletDirect)-1)
 
 def determine8(directCSV, mirrorCSV):
     return 8

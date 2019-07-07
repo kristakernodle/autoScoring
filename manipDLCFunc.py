@@ -80,21 +80,8 @@ def readDLC(f,bodypart,pawPref):
     
     return pd.read_csv(f,header=2,names=['x','y','pval'],usecols=cols)
 
-def withinDistThresh(bodypartList_direct,bodypartList_mirror,distThresh=100,startFrame=0,endFrame=50):
-    # This function calculates whether a bodypart remains within a specified
-    # distance threshold for at least half of the provided frames
-    
-    # INPUT:
-        # bodypartList_direct - DataFrame from readDLC func (above) for direct view
-        # bodypartList_mirror - DataFrame from readDLC func (above) for mirror view
-        # distThresh - maximum distance from average that is acceptable (default 100px)
-        # startFrame - frame number to start comparison (default is first frame)
-        # endFrame - frame number to end comparison (default is 50th frame)
-    
-    # OUTPUT:
-        # boolean value
-    
-    # Find x and y values in direct view and mirror view that are >= 0.95
+def sigP(bodypartList_direct,bodypartList_mirror,startFrame,endFrame):
+    # Find the
     xDir=yDir=xMir=yMir=[]
     for frameNum in range(startFrame,endFrame):
         if bodypartList_direct.pval[frameNum] >= 0.95:
@@ -103,30 +90,30 @@ def withinDistThresh(bodypartList_direct,bodypartList_mirror,distThresh=100,star
         if bodypartList_mirror.pval[frameNum] >= 0.95:
             xMir.append(bodypartList_mirror.x[frameNum])
             yMir.append(bodypartList_mirror.y[frameNum])
+    return xDir,yDir,xMir,yMir
+
+def withinDistThresh(distThresh,xDir,yDir,xDirAvg,yDirAvg,xMir,yMir,xMirAvg,yMirAvg):
+    # This function calculates whether a bodypart remains within a specified
+    # distance threshold for at least half of the provided frames
     
-    # Calculate average x and y values for designated frames when pval >= 0.95
-    xDirAvg = auxFunc.mean(xDir)
-    yDirAvg = auxFunc.mean(yDir)
-    xMirAvg = auxFunc.mean(xMir)
-    yMirAvg = auxFunc.mean(yMir)
+    # INPUT:
+        # distThresh - The maximum distance between two points that is allowable
+        # xDir - x point from direct view
+        # yDir - y point from direct view
+        # xDirAvg - average x value from direct view
+        # yDirAvg - average y value from direct view
+        # xMir - x point from mirror view
+        # yMir - y point from mirror view
+        # xMirAvg - average x value from mirror view
+        # yMirAvg - average y value from mirror view
     
-    # Check is x,y points are greater than distThresh away from average
-    largeDistDir = 0
-    largeDistMir = 0
-    for frameNum in range(0,len(xDir)):
-        
-        if xDirAvg-distThresh <= xDir[frameNum] <= xDirAvg+distThresh and yDirAvg-distThresh <= yDir[frameNum] <= yDirAvg+distThresh:
-            continue
-        elif largeDistDir >= np.ceil(len(xDir)/2):
-            return False
-        else:
-            largeDistDir += 1
-            
-        if xMirAvg-distThresh <= xMir[frameNum] <= xMirAvg+distThresh and yMirAvg-distThresh <= yMir[frameNum] <= yMirAvg+distThresh:
-            continue
-        elif largeDistMir >=np.ceil(len(xMir)/2):
-            return False
-        else:
-            largeDistMir += 1
-            
-    return True
+    # OUTPUT:
+        # boolean value
+    
+    dirDist = auxFunc.distBtwnPts(xDir,yDir,xDirAvg,yDirAvg)
+    mirDist = auxFunc.distBtwnPts(xMir,yMir,xMirAvg,yMirAvg)
+    
+    if dirDist < distThresh and mirDist < distThresh:
+        return True
+    else:
+        return False
