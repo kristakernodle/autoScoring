@@ -52,7 +52,48 @@ def determine5(directCSV, mirrorCSV):
 # def determine6(): VIDEOS AND DLC ANALYSIS DO NOT EXIST FOR THIS SCORE
     
 def determine7(directCSV, mirrorCSV):
-    return 7
+    # Score 7: Reach, pellet remains on shelf
+    
+    # This function does not require verifying that a reach is performed. The
+    # LabView software used to obtain the videos analyzed by DLC only creates
+    # videos when a reach has been performed
+    
+    # The goal of this function will be to identify if a pellet is present at
+    # the end of the video AND, if the pellet is present, make sure it is 
+    
+    # Read in DLC values for the pellet
+    pelletDirect = auxFunc.readDLC(directCSV,'pellet')
+    pelletMirror = auxFunc.readDLC(mirrorCSV,'pellet')
+
+    # Find the average starting location (first 50 frames) of the pellet in 
+    # all views
+    xDirAvg_start = auxFunc.mean(pelletDirect.x[0:50])
+    yDirAvg_start = auxFunc.mean(pelletDirect.y[0:50])
+    xMirAvg_start = auxFunc.mean(pelletMirror.x[0:50])
+    yMirAvg_start = auxFunc.mean(pelletMirror.y[0:50])
+    
+    # Test the last 50 frames to see if the pellet is present
+    numLowP = 0
+    for frameNum in range(len(pelletDirect)-51,len(pelletDirect)-1):
+        
+        if pelletDirect.pval[frameNum] >= 0.95:
+            # If the pellet is present, move to the next frame
+            continue
+        
+        elif pelletDirect.pval[frameNum] < 0.95 and numLowP >= 25:
+            # If the pellet is not present and has not been present for at least
+            # 25 frames, return the function as False
+            return False
+        
+        else:
+            # If the pellet is not present, increase numLowP by one to track
+            # how many frames the pellet has not been present for
+            numLowP += 1
+    
+    # If the pellet is present for more than half of the last 50 frames, test
+    # to see how far it is away from the average pellet starting value
+    value = auxFunc.withinDistThresh(50,pelletDirect,pelletMirror,xDirAvg_start,yDirAvg_start,xMirAvg_start,yMirAvg_start)
+    return value
 
 def determine8(directCSV, mirrorCSV):
     return 8
@@ -63,15 +104,17 @@ def determine10(directCSV, mirrorCSV):
     return 9
 
 ### Define function to test all possible individual scores
-def determineOutcome(csvFileName, csvMirrorFileName):	
-	if determine7(csvFileName, csvMirrorFileName):
-		return 7	
-	if determine0(csvFileName, csvMirrorFileName):
-		return 0
-	if determine1(csvFileName, csvMirrorFileName):
-		return 1
-	if determine2(csvFileName, csvMirrorFileName):
-		return 2
-	return 4
+def determineOutcome(directCSV, mirrorCSV):
+
+    return determine7(directCSV,mirrorCSV)	
+#	if determine7(csvFileName, csvMirrorFileName):
+#		return 7	
+#	if determine0(csvFileName, csvMirrorFileName):
+#		return 0
+#	if determine1(csvFileName, csvMirrorFileName):
+#		return 1
+#	if determine2(csvFileName, csvMirrorFileName):
+#		return 2
+#	return 4
 
 

@@ -42,12 +42,15 @@ for directFile in sorted(allFiles_direct):
     identifiers = filename.split('_')[0:4]
     uniqueID = '_'.join(identifiers)
     
+#    # This is used for debugging
+#    if '038' in uniqueID:
+#        mirrorFile = [file for file in allFiles_mirror if uniqueID in file]
+#        break 
+    
     # Find mirrorFile that corresponds with this trial
     for mirrorFile in allFiles_mirror:
         if uniqueID in mirrorFile:
-            # break # This is used for debugging
             outcome = scoreFunctions.determineOutcome(directFile,mirrorFile)
-            outcome=1
             allScores.append([uniqueID.split('_')[-1],str(outcome)])
             
 dirParts=allFiles_direct[0].split('/')[:-2]
