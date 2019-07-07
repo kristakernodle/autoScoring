@@ -27,7 +27,6 @@ Created on Fri Jul  5 15:40:57 2019
 # 10: Used preferred paw after obtaining or moving pellet with tongue
 
 ### Set Up
-import auxFunc
 import manipDLCFunc
 
 ### Define Individual Score Functions
@@ -85,8 +84,9 @@ def determine7(directCSV, mirrorCSV):
             numLowP += 1
     
     # If the pellet is present for more than half of the last 50 frames, test
-    # to see how far it is away from the average pellet starting value
-    return manipDLCFunc.withinDistThresh(pelletDirect,pelletMirror,50)
+    # to see how far it is away from the average pellet starting value (distance
+    # threshold is set to 50 here)
+    return manipDLCFunc.withinDistThresh(pelletDirect,pelletMirror,50,len(pelletDirect)-51,len(pelletDirect)-1)
 
 def determine8(directCSV, mirrorCSV):
     return 8
@@ -99,9 +99,9 @@ def determine10(directCSV, mirrorCSV):
 ### Define function to test all possible individual scores
 def determineOutcome(directCSV, mirrorCSV):
 
-    return determine7(directCSV,mirrorCSV)	
-#	if determine7(csvFileName, csvMirrorFileName):
-#		return 7	
+    if determine7(directCSV,mirrorCSV):
+        return 7
+
 #	if determine0(csvFileName, csvMirrorFileName):
 #		return 0
 #	if determine1(csvFileName, csvMirrorFileName):
