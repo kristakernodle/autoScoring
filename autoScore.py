@@ -49,10 +49,15 @@ for directFile in sorted(allFiles_direct):
     
     # Find mirrorFile that corresponds with this trial
     for mirrorFile in allFiles_mirror:
+
         if uniqueID in mirrorFile:
+            # If the mirrorFile corresponds with directFile, find outcome
             outcome = scoreFunctions.determineOutcome(directFile,mirrorFile)
+            # Save trial number and outcome in allScores list
             allScores.append([uniqueID.split('_')[-1],str(outcome)])
-            
+
+# Save allScores into .csv file located in subjID_date folder (one level above
+# the DLC .csv files)
 dirParts=allFiles_direct[0].split('/')[:-2]
 saveDir='/'.join(dirParts) + '/' + '_'.join(identifiers[0:2])
 auxFunc.writeToCSV(saveDir+"_autoScored.csv",allScores)

@@ -15,7 +15,7 @@ Created on Fri Jul  5 12:50:49 2019
 ### Set up
 from pathlib import Path
 
-### General Functions
+### Define Functions
 
 def mean(vector):
     return sum(vector)/len(vector)
@@ -72,10 +72,28 @@ def directoryContents(directory,allSubDir=True):
         return file_list, dir_list
             
 def readfile(F):
+    # This function reads a simple file, splitting at each line of the file.
+    
+    # INPUT:
+        # F - full file path and filename, e.g., '/some/directory/fileToRead.csv'
+    
+    # OUTPUT:
+        # A list containing all lines of the file that was read
+        
     with open(F) as f:
         return f.read().splitlines()
 
 def writeToCSV(saveFullFilename,itemsList):
+    # This function writes a list (any size) to a csv
+    
+    # INPUT:
+        # saveFullFilename - full path directory, including filename and extension
+        #       for saved file
+        # itemsList - list that will be saved into file provided in saveFullFilename
+    
+    # OUTPUT:
+        # File, specified by saveFullFilename
+        
     with open(saveFullFilename,'w') as f:
         for item in itemsList:
             f.writelines("%s," % entry for entry in item)
