@@ -80,14 +80,23 @@ def sigP(bodypartList_direct,bodypartList_mirror,startFrame,endFrame):
         # xMir - x-values from mirror view with p>=0.95
         # yMir - y-values from mirror view with p>=0.95
         
+    # Initialize output variables
     xDir=yDir=xMir=yMir=[]
+    
+    # Step through frames in interested range
     for frameNum in range(startFrame,endFrame):
+        
+        # If direct view pval is greater than 0.95, add x & y to xDir and yDir,
+        # respectively. Otherwise, replace x & y with 0's
         if bodypartList_direct.pval[frameNum] >= 0.95:
             xDir.append(bodypartList_direct.x[frameNum])
             yDir.append(bodypartList_direct.y[frameNum])
         else:
             xDir.append(0)
             yDir.append(0)
+            
+        # If mirror view pval is greater than 0.95, add x & y to xMir and yMir,
+        # respectively. Otherwise, replace x & y with 0,0
         if bodypartList_mirror.pval[frameNum] >= 0.95:
             xMir.append(bodypartList_mirror.x[frameNum])
             yMir.append(bodypartList_mirror.y[frameNum])
@@ -97,36 +106,18 @@ def sigP(bodypartList_direct,bodypartList_mirror,startFrame,endFrame):
             
     return xDir,yDir,xMir,yMir
 
-def findTriggerFrame(csvFileName, csvFileNameMirror):
-    # This is Harvey's function and I haven't put a lot of time into sorting out what it does yet
-	digit2xvalue = []
-	digit2pvalue = []
-
-	with open(csvFileNameMirror) as f:
-		reader = csv.reader(f)
-		for i in reader:
-			digit2xvalue.append(i[28])
-			digit2pvalue.append(i[30])
-
-	digit2xvalue = digit2xvalue[3:]
-	digit2pvalue = digit2pvalue[3:]
-	digit2xvalue = [float(i) for i in digit2xvalue]
-	digit2pvalue = [float(i) for i in digit2pvalue]
-	digit2xvalue = digit2xvalue[0:1290]
-	for i in range(0, 1290):
-		if digit2pvalue[i] < 0.75:
-			digit2xvalue[i] = 0
-
-	for i in range(1, 1280):
-		if digit2xvalue[i] != 0:
-
-			if digit2xvalue[i+1] == 0 or digit2xvalue[i+2] == 0 or digit2xvalue[i+3] == 0 or digit2xvalue[i+4] == 0 or digit2xvalue[i+5] == 0 or digit2xvalue[i] > 250: 
-				
-				digit2xvalue[i] = 0
-
-	for i in range(1, 1290):
-		if digit2xvalue[i] != 0:
-			return i
+def findTriggerFrame(xDir,yDir,xMir,yMir):
+    
+    # Search through all xDir values -- The logic here doesn't make a lot of
+    # sense to me and I'm verifying with Harvey what's going on. 
+    for value in xDir:
+        if xDir[value] != 0:
+            if any(xDir[value+1:value+5]) or xDir[value] > 250:
+                xDir[value] = 0
+                
+    # Return the first non-zero value
+    return xDir.index(next(filter(lambda x: x!=0, xDir)))
+    
 
 def withinDistThresh(distThresh,xDir,yDir,xDirAvg,yDirAvg,xMir,yMir,xMirAvg,yMirAvg):
     # This function calculates whether a bodypart remains within a specified
